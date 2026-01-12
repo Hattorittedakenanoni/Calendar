@@ -4,7 +4,7 @@ from config import Config
 from models import db, User, Company, Schedule, ProposedDate
 
 app = Flask(__name__)
-
+app.config['JSON_AS_ASCII'] = False
 app.config.from_object(Config)
 
 # CORS設定（フロントエンドから�?�アクセスを許可?�?
