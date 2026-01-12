@@ -6,24 +6,24 @@ from models import db, User, Company, Schedule, ProposedDate
 app = Flask(__name__)
 app.config.from_object(Config)
 
-# CORSİ’èiƒtƒƒ“ƒgƒGƒ“ƒh‚©‚ç‚ÌƒAƒNƒZƒX‚ğ‹–‰Âj
+# CORSè¨­å®šï¼ˆãƒ•ãƒ­ãƒ³ãƒˆã‚¨ãƒ³ãƒ‰ã‹ã‚‰ã®ã‚¢ã‚¯ã‚»ã‚¹ã‚’è¨±å¯ï¼‰
 CORS(app)
 
-# DB‰Šú‰»
+# DBåˆæœŸåŒ–
 db.init_app(app)
 
-# ‰¼‚Ìƒ†[ƒU[IDiƒƒOƒCƒ“‹@”\À‘•‚Ü‚Å‚Í‚±‚ê‚ğg‚¤j
+# ä»®ã®ãƒ¦ãƒ¼ã‚¶ãƒ¼IDï¼ˆãƒ­ã‚°ã‚¤ãƒ³æ©Ÿèƒ½å®Ÿè£…ã¾ã§ã¯ã“ã‚Œã‚’ä½¿ã†ï¼‰
 TEMP_USER_ID = 1
 
 # ===========================================
-# ‰ŠúƒZƒbƒgƒAƒbƒv—p
+# åˆæœŸã‚»ãƒƒãƒˆã‚¢ãƒƒãƒ—ç”¨
 # ===========================================
 @app.route('/api/init', methods=['POST'])
 def init_db():
-    """DBƒe[ƒuƒ‹ì¬ & ƒeƒXƒg—pƒ†[ƒU[ì¬"""
+    """DBãƒ†ãƒ¼ãƒ–ãƒ«ä½œæˆ & ãƒ†ã‚¹ãƒˆç”¨ãƒ¦ãƒ¼ã‚¶ãƒ¼ä½œæˆ"""
     db.create_all()
     
-    # ƒeƒXƒg—pƒ†[ƒU[‚ª‚¢‚È‚¯‚ê‚Îì¬
+    # ãƒ†ã‚¹ãƒˆç”¨ãƒ¦ãƒ¼ã‚¶ãƒ¼ãŒã„ãªã‘ã‚Œã°ä½œæˆ
     if not User.query.get(TEMP_USER_ID):
         test_user = User(
             id=TEMP_USER_ID,
@@ -37,14 +37,14 @@ def init_db():
     return jsonify({'message': 'Database initialized'}), 200
 
 # ---------------
-# Še‹@”\‚ğÀ‘•
+# å„æ©Ÿèƒ½ã‚’å®Ÿè£…
 # ---------------
 # ===========================================
-# Šé‹ÆiAŠˆó‹µjAPI
+# ä¼æ¥­ï¼ˆå°±æ´»çŠ¶æ³ï¼‰API
 # ===========================================
 @app.route('/api/companies', methods=['GET'])
 def get_companies():
-    """Šé‹Æˆê——‚ğæ“¾"""
+    """ä¼æ¥­ä¸€è¦§ã‚’å–å¾—"""
     companies = Company.query.filter_by(user_id=TEMP_USER_ID).all()
     
     result = []
@@ -67,12 +67,12 @@ def get_companies():
 
 @app.route('/api/companies', methods=['POST'])
 def create_company():
-    """Šé‹Æ‚ğ’Ç‰Á"""
+    """ä¼æ¥­ã‚’è¿½åŠ """
     data = request.get_json()
     
-    # •K{€–Úƒ`ƒFƒbƒN
+    # å¿…é ˆé …ç›®ãƒã‚§ãƒƒã‚¯
     if not data.get('company_name'):
-        return jsonify({'error': 'Šé‹Æ–¼‚Í•K{‚Å‚·'}), 400
+        return jsonify({'error': 'ä¼æ¥­åã¯å¿…é ˆã§ã™'}), 400
     
     new_company = Company(
         user_id=TEMP_USER_ID,
@@ -80,7 +80,7 @@ def create_company():
         via=data.get('via'),
         status=data.get('status'),
         level=data.get('level'),
-        start_time=data.get('start_time'),  # Œã‚Åƒp[ƒXˆ—‚ğ’Ç‰Á
+        start_time=data.get('start_time'),  # å¾Œã§ãƒ‘ãƒ¼ã‚¹å‡¦ç†ã‚’è¿½åŠ 
         end_time=data.get('end_time'),
         goodpoint=data.get('goodpoint'),
         badpoint=data.get('badpoint'),
@@ -91,21 +91,21 @@ def create_company():
     db.session.commit()
     
     return jsonify({
-        'message': 'Šé‹Æ‚ğ’Ç‰Á‚µ‚Ü‚µ‚½',
+        'message': 'ä¼æ¥­ã‚’è¿½åŠ ã—ã¾ã—ãŸ',
         'company_id': new_company.company_id
     }), 201
 
 
 @app.route('/api/companies/<int:company_id>', methods=['GET'])
 def get_company(company_id):
-    """Šé‹ÆÚ×‚ğæ“¾"""
+    """ä¼æ¥­è©³ç´°ã‚’å–å¾—"""
     company = Company.query.filter_by(
         company_id=company_id,
         user_id=TEMP_USER_ID
     ).first()
     
     if not company:
-        return jsonify({'error': 'Šé‹Æ‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñ'}), 404
+        return jsonify({'error': 'ä¼æ¥­ãŒè¦‹ã¤ã‹ã‚Šã¾ã›ã‚“'}), 404
     
     return jsonify({
         'company_id': company.company_id,
@@ -123,18 +123,18 @@ def get_company(company_id):
 
 @app.route('/api/companies/<int:company_id>', methods=['PUT'])
 def update_company(company_id):
-    """Šé‹Æî•ñ‚ğXV"""
+    """ä¼æ¥­æƒ…å ±ã‚’æ›´æ–°"""
     company = Company.query.filter_by(
         company_id=company_id,
         user_id=TEMP_USER_ID
     ).first()
     
     if not company:
-        return jsonify({'error': 'Šé‹Æ‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñ'}), 404
+        return jsonify({'error': 'ä¼æ¥­ãŒè¦‹ã¤ã‹ã‚Šã¾ã›ã‚“'}), 404
     
     data = request.get_json()
     
-    # XV‰Â”\‚ÈƒtƒB[ƒ‹ƒh
+    # æ›´æ–°å¯èƒ½ãªãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰
     if 'company_name' in data:
         company.company_name = data['company_name']
     if 'via' in data:
@@ -156,33 +156,33 @@ def update_company(company_id):
     
     db.session.commit()
     
-    return jsonify({'message': 'Šé‹Æî•ñ‚ğXV‚µ‚Ü‚µ‚½'}), 200
+    return jsonify({'message': 'ä¼æ¥­æƒ…å ±ã‚’æ›´æ–°ã—ã¾ã—ãŸ'}), 200
 
 
 @app.route('/api/companies/<int:company_id>', methods=['DELETE'])
 def delete_company(company_id):
-    """Šé‹Æ‚ğíœ"""
+    """ä¼æ¥­ã‚’å‰Šé™¤"""
     company = Company.query.filter_by(
         company_id=company_id,
         user_id=TEMP_USER_ID
     ).first()
     
     if not company:
-        return jsonify({'error': 'Šé‹Æ‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñ'}), 404
+        return jsonify({'error': 'ä¼æ¥­ãŒè¦‹ã¤ã‹ã‚Šã¾ã›ã‚“'}), 404
     
     db.session.delete(company)
     db.session.commit()
     
-    return jsonify({'message': 'Šé‹Æ‚ğíœ‚µ‚Ü‚µ‚½'}), 200
+    return jsonify({'message': 'ä¼æ¥­ã‚’å‰Šé™¤ã—ã¾ã—ãŸ'}), 200
 
 
 
 # ===========================================
-# “®ìŠm”F—p
+# å‹•ä½œç¢ºèªç”¨
 # ===========================================
 @app.route('/api/health', methods=['GET'])
 def health_check():
-    """ƒwƒ‹ƒXƒ`ƒFƒbƒN"""
+    """ãƒ˜ãƒ«ã‚¹ãƒã‚§ãƒƒã‚¯"""
     return jsonify({'status': 'ok'}), 200
 
 
@@ -190,7 +190,7 @@ if __name__ == '__main__':
     with app.app_context():
         db.create_all()
         
-        # ƒeƒXƒgƒ†[ƒU[‚ª‚¢‚È‚¯‚ê‚Îì¬
+        # ãƒ†ã‚¹ãƒˆãƒ¦ãƒ¼ã‚¶ãƒ¼ãŒã„ãªã‘ã‚Œã°ä½œæˆ
         existing_user = User.query.get(TEMP_USER_ID)
         if not existing_user:
             test_user = User(
@@ -201,9 +201,9 @@ if __name__ == '__main__':
             )
             db.session.add(test_user)
             db.session.commit()
-            print('ƒeƒXƒgƒ†[ƒU[‚ğì¬‚µ‚Ü‚µ‚½')
+            print('ãƒ†ã‚¹ãƒˆãƒ¦ãƒ¼ã‚¶ãƒ¼ã‚’ä½œæˆã—ã¾ã—ãŸ')
         else:
-            print('ƒeƒXƒgƒ†[ƒU[‚ÍŠù‚É‘¶İ‚µ‚Ü‚·')
+            print('ãƒ†ã‚¹ãƒˆãƒ¦ãƒ¼ã‚¶ãƒ¼ã¯æ—¢ã«å­˜åœ¨ã—ã¾ã™')
     
     app.run(debug=True, port=5000)
 
