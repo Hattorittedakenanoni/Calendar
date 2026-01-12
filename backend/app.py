@@ -191,7 +191,9 @@ if __name__ == '__main__':
         db.create_all()
         
         # テストユーザーがいなければ作成
-        existing_user = User.query.get(TEMP_USER_ID)
+        # existing_user = User.query.get(TEMP_USER_ID)
+        existing_user = db.session.get(User, TEMP_USER_ID)
+
         if not existing_user:
             test_user = User(
                 id=TEMP_USER_ID,
