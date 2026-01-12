@@ -5,7 +5,7 @@ db = SQLAlchemy()
 
 
 class User(db.Model):
-    """ƒ†[ƒU[ƒe[ƒuƒ‹"""
+    """ãƒ¦ãƒ¼ã‚¶ãƒ¼ãƒ†ãƒ¼ãƒ–ãƒ«"""
     __tablename__ = 'users'
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
@@ -13,51 +13,51 @@ class User(db.Model):
     email = db.Column(db.String(255), nullable=False, unique=True)
     password = db.Column(db.String(255), nullable=False)
 
-    # ƒŠƒŒ[ƒVƒ‡ƒ“
+    # ãƒªãƒ¬ãƒ¼ã‚·ãƒ§ãƒ³
     companies = db.relationship('Company', backref='user', lazy=True)
     schedules = db.relationship('Schedule', backref='user', lazy=True)
 
 
 class Company(db.Model):
-    """Šé‹Æƒe[ƒuƒ‹iAŠˆó‹µj"""
+    """ä¼æ¥­ãƒ†ãƒ¼ãƒ–ãƒ«ï¼ˆå°±æ´»çŠ¶æ³ï¼‰"""
     __tablename__ = 'companies'
 
     company_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
     company_name = db.Column(db.String(255), nullable=False)
-    via = db.Column(db.String(255), nullable=True)  # Œo—R
-    status = db.Column(db.String(255), nullable=True)  # ‘IlƒXƒe[ƒ^ƒX
-    level = db.Column(db.String(255), nullable=True)  # u–]“x
-    start_time = db.Column(db.DateTime, nullable=True)  # Ÿ‰ñ‘Il ŠJn“ú
-    end_time = db.Column(db.DateTime, nullable=True)  # Ÿ‰ñ‘Il I—¹“ú
-    goodpoint = db.Column(db.String(1000), nullable=True)  # —Ç‚¢‚Æv‚¤“_
-    badpoint = db.Column(db.String(1000), nullable=True)  # Œœ”O“_
+    via = db.Column(db.String(255), nullable=True)  # çµŒç”±
+    status = db.Column(db.String(255), nullable=True)  # é¸è€ƒã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹
+    level = db.Column(db.String(255), nullable=True)  # å¿—æœ›åº¦
+    start_time = db.Column(db.DateTime, nullable=True)  # æ¬¡å›é¸è€ƒ é–‹å§‹æ—¥æ™‚
+    end_time = db.Column(db.DateTime, nullable=True)  # æ¬¡å›é¸è€ƒ çµ‚äº†æ—¥æ™‚
+    goodpoint = db.Column(db.String(1000), nullable=True)  # è‰¯ã„ã¨æ€ã†ç‚¹
+    badpoint = db.Column(db.String(1000), nullable=True)  # æ‡¸å¿µç‚¹
     memo = db.Column(db.String(1000), nullable=True)
 
-    # ƒŠƒŒ[ƒVƒ‡ƒ“
+    # ãƒªãƒ¬ãƒ¼ã‚·ãƒ§ãƒ³
     schedules = db.relationship('Schedule', backref='company', lazy=True)
     proposed_dates = db.relationship('ProposedDate', backref='company', lazy=True)
 
-    class Schedule(db.Model):
-    """ƒXƒPƒWƒ…[ƒ‹ƒe[ƒuƒ‹"""
+class Schedule(db.Model):
+    """ã‚¹ã‚±ã‚¸ãƒ¥ãƒ¼ãƒ«ãƒ†ãƒ¼ãƒ–ãƒ«"""
     __tablename__ = 'schedules'
 
     schedule_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
-    schedule_type = db.Column(db.String(255), nullable=False)  # í•Ê
-    company_id = db.Column(db.Integer, db.ForeignKey('companies.company_id'), nullable=True)  # NULLable ‚É•ÏX
-    schedule_name = db.Column(db.String(255), nullable=False)  # —\’è–¼
+    schedule_type = db.Column(db.String(255), nullable=False)  # ç¨®åˆ¥
+    company_id = db.Column(db.Integer, db.ForeignKey('companies.company_id'), nullable=True)  # NULLable ã«å¤‰æ›´
+    schedule_name = db.Column(db.String(255), nullable=False)  # äºˆå®šå
     start_time = db.Column(db.DateTime, nullable=False)
     end_time = db.Column(db.DateTime, nullable=False)
     memo = db.Column(db.String(1000), nullable=True)
 
 
 class ProposedDate(db.Model):
-    """–ÊÚŒó•â“úƒe[ƒuƒ‹"""
+    """é¢æ¥å€™è£œæ—¥ãƒ†ãƒ¼ãƒ–ãƒ«"""
     __tablename__ = 'proposed_dates'
 
     date_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     company_id = db.Column(db.Integer, db.ForeignKey('companies.company_id'), nullable=False)
-    name = db.Column(db.String(255), nullable=False)  # —\’è–¼
+    name = db.Column(db.String(255), nullable=False)  # äºˆå®šå
     start_time = db.Column(db.DateTime, nullable=False)
     end_time = db.Column(db.DateTime, nullable=False)
