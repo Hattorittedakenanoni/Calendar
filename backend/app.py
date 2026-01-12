@@ -4,26 +4,27 @@ from config import Config
 from models import db, User, Company, Schedule, ProposedDate
 
 app = Flask(__name__)
+
 app.config.from_object(Config)
 
-# CORS設定（フロントエンドからのアクセスを許可）
+# CORS設定（フロントエンドから�?�アクセスを許可?�?
 CORS(app)
 
-# DB初期化
+# DB初期�?
 db.init_app(app)
 
-# 仮のユーザーID（ログイン機能実装まではこれを使う）
+# 仮のユーザーID?��ログイン機�?�実�?まではこれを使�??�?
 TEMP_USER_ID = 1
 
 # ===========================================
-# 初期セットアップ用
+# 初期セ�?トア�?プ用
 # ===========================================
 @app.route('/api/init', methods=['POST'])
 def init_db():
-    """DBテーブル作成 & テスト用ユーザー作成"""
+    """DB�?ーブル作�?? & �?スト用ユーザー作�??"""
     db.create_all()
     
-    # テスト用ユーザーがいなければ作成
+    # �?スト用ユーザーがいなければ作�??
     if not User.query.get(TEMP_USER_ID):
         test_user = User(
             id=TEMP_USER_ID,
@@ -37,14 +38,14 @@ def init_db():
     return jsonify({'message': 'Database initialized'}), 200
 
 # ---------------
-# 各機能を実装
+# �?機�?�を実�?
 # ---------------
 # ===========================================
-# 企業（就活状況）API
+# 企業?��就活状�??��API
 # ===========================================
 @app.route('/api/companies', methods=['GET'])
 def get_companies():
-    """企業一覧を取得"""
+    """企業一覧を取�?"""
     companies = Company.query.filter_by(user_id=TEMP_USER_ID).all()
     
     result = []
@@ -67,12 +68,12 @@ def get_companies():
 
 @app.route('/api/companies', methods=['POST'])
 def create_company():
-    """企業を追加"""
+    """企業を追�?"""
     data = request.get_json()
     
-    # 必須項目チェック
+    # �?須�??目チェ�?ク
     if not data.get('company_name'):
-        return jsonify({'error': '企業名は必須です'}), 400
+        return jsonify({'error': '企業名�?��?須で�?'}), 400
     
     new_company = Company(
         user_id=TEMP_USER_ID,
@@ -80,7 +81,7 @@ def create_company():
         via=data.get('via'),
         status=data.get('status'),
         level=data.get('level'),
-        start_time=data.get('start_time'),  # 後でパース処理を追加
+        start_time=data.get('start_time'),  # 後でパ�?�ス処�?を追�?
         end_time=data.get('end_time'),
         goodpoint=data.get('goodpoint'),
         badpoint=data.get('badpoint'),
@@ -91,14 +92,14 @@ def create_company():
     db.session.commit()
     
     return jsonify({
-        'message': '企業を追加しました',
+        'message': '企業を追�?しました',
         'company_id': new_company.company_id
     }), 201
 
 
 @app.route('/api/companies/<int:company_id>', methods=['GET'])
 def get_company(company_id):
-    """企業詳細を取得"""
+    """企業詳細を取�?"""
     company = Company.query.filter_by(
         company_id=company_id,
         user_id=TEMP_USER_ID
@@ -123,7 +124,7 @@ def get_company(company_id):
 
 @app.route('/api/companies/<int:company_id>', methods=['PUT'])
 def update_company(company_id):
-    """企業情報を更新"""
+    """企業�?報を更新"""
     company = Company.query.filter_by(
         company_id=company_id,
         user_id=TEMP_USER_ID
@@ -134,7 +135,7 @@ def update_company(company_id):
     
     data = request.get_json()
     
-    # 更新可能なフィールド
+    # 更新可能なフィール�?
     if 'company_name' in data:
         company.company_name = data['company_name']
     if 'via' in data:
@@ -156,7 +157,7 @@ def update_company(company_id):
     
     db.session.commit()
     
-    return jsonify({'message': '企業情報を更新しました'}), 200
+    return jsonify({'message': '企業�?報を更新しました'}), 200
 
 
 @app.route('/api/companies/<int:company_id>', methods=['DELETE'])
@@ -182,7 +183,7 @@ def delete_company(company_id):
 # ===========================================
 @app.route('/api/health', methods=['GET'])
 def health_check():
-    """ヘルスチェック"""
+    """ヘルスチェ�?ク"""
     return jsonify({'status': 'ok'}), 200
 
 
@@ -190,7 +191,7 @@ if __name__ == '__main__':
     with app.app_context():
         db.create_all()
         
-        # テストユーザーがいなければ作成
+        # �?ストユーザーがいなければ作�??
         # existing_user = User.query.get(TEMP_USER_ID)
         existing_user = db.session.get(User, TEMP_USER_ID)
 
@@ -203,9 +204,9 @@ if __name__ == '__main__':
             )
             db.session.add(test_user)
             db.session.commit()
-            print('テストユーザーを作成しました')
+            print('�?ストユーザーを作�?�しました')
         else:
-            print('テストユーザーは既に存在します')
+            print('�?ストユーザーは既に存在しま�?')
     
     app.run(debug=True, port=5000)
 
