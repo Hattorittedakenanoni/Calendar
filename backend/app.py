@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 from config import Config
@@ -7,24 +9,24 @@ app = Flask(__name__)
 app.config['JSON_AS_ASCII'] = False
 app.config.from_object(Config)
 
-# CORS設定（フロントエンドから�?�アクセスを許可?�?
+# CORS設定（フロントエンドから�?�アクセスを許可?�?
 CORS(app)
 
-# DB初期�?
+# DB初期�?
 db.init_app(app)
 
-# 仮のユーザーID?��ログイン機�?�実�?まではこれを使�??�?
+# 仮のユーザーID?��ログイン機�?�実�?まではこれを使�??�?
 TEMP_USER_ID = 1
 
 # ===========================================
-# 初期セ�?トア�?プ用
+# 初期セ�?トア�?プ用
 # ===========================================
 @app.route('/api/init', methods=['POST'])
 def init_db():
-    """DB�?ーブル作�?? & �?スト用ユーザー作�??"""
+    """DB�?ーブル作�?? & �?スト用ユーザー作�??"""
     db.create_all()
     
-    # �?スト用ユーザーがいなければ作�??
+    # �?スト用ユーザーがいなければ作�??
     if not User.query.get(TEMP_USER_ID):
         test_user = User(
             id=TEMP_USER_ID,
@@ -38,15 +40,15 @@ def init_db():
     return jsonify({'message': 'Database initialized'}), 200
 
 # ---------------
-# �?機�?�を実�?
+# �?機�?�を実�?
 # ---------------
 # ===========================================
-# 企業?��就活状�??��API
+# 企業?��就活状�??��API
 # ===========================================
 @app.route('/api/companies', methods=['GET'])
 def get_companies():
-    """企業一覧を取�?"""
-    companies = Company.query.filter_by(user_id=TEMP_USER_ID).all()
+    """企業一覧を取�?"""
+    companies = Company.query.filter_by(user_id=TEMP_USER_ID).all() #データベースから情報を持ってきている
     
     result = []
     for c in companies:
@@ -63,17 +65,17 @@ def get_companies():
             'memo': c.memo,
         })
     
-    return jsonify(result), 200
+    return jsonify(result), 200 #resultに保存して、フロントエンド側に渡す
 
 
 @app.route('/api/companies', methods=['POST'])
 def create_company():
-    """企業を追�?"""
+    """企業を追加"""
     data = request.get_json()
     
-    # �?須�??目チェ�?ク
+    # 必須項目チェック
     if not data.get('company_name'):
-        return jsonify({'error': '企業名�?��?須で�?'}), 400
+        return jsonify({'error': '企業名�?��?須で�?'}), 400
     
     new_company = Company(
         user_id=TEMP_USER_ID,
@@ -81,25 +83,25 @@ def create_company():
         via=data.get('via'),
         status=data.get('status'),
         level=data.get('level'),
-        start_time=data.get('start_time'),  # 後でパ�?�ス処�?を追�?
+        start_time=data.get('start_time'),  # 後でパ�?�ス処�?を追�?
         end_time=data.get('end_time'),
         goodpoint=data.get('goodpoint'),
         badpoint=data.get('badpoint'),
         memo=data.get('memo'),
     )
     
-    db.session.add(new_company)
+    db.session.add(new_company) #企業の情報をデータベースに保存
     db.session.commit()
     
     return jsonify({
-        'message': '企業を追�?しました',
+        'message': '企業を追加しました',
         'company_id': new_company.company_id
     }), 201
 
 
 @app.route('/api/companies/<int:company_id>', methods=['GET'])
 def get_company(company_id):
-    """企業詳細を取�?"""
+    """企業詳細を取�?"""
     company = Company.query.filter_by(
         company_id=company_id,
         user_id=TEMP_USER_ID
@@ -124,7 +126,7 @@ def get_company(company_id):
 
 @app.route('/api/companies/<int:company_id>', methods=['PUT'])
 def update_company(company_id):
-    """企業�?報を更新"""
+    """企業�?報を更新"""
     company = Company.query.filter_by(
         company_id=company_id,
         user_id=TEMP_USER_ID
@@ -135,7 +137,7 @@ def update_company(company_id):
     
     data = request.get_json()
     
-    # 更新可能なフィール�?
+    # 更新可能なフィール�?
     if 'company_name' in data:
         company.company_name = data['company_name']
     if 'via' in data:
@@ -157,7 +159,7 @@ def update_company(company_id):
     
     db.session.commit()
     
-    return jsonify({'message': '企業�?報を更新しました'}), 200
+    return jsonify({'message': '企業�?報を更新しました'}), 200
 
 
 @app.route('/api/companies/<int:company_id>', methods=['DELETE'])
@@ -183,7 +185,7 @@ def delete_company(company_id):
 # ===========================================
 @app.route('/api/health', methods=['GET'])
 def health_check():
-    """ヘルスチェ�?ク"""
+    """ヘルスチェ�?ク"""
     return jsonify({'status': 'ok'}), 200
 
 
@@ -191,7 +193,7 @@ if __name__ == '__main__':
     with app.app_context():
         db.create_all()
         
-        # �?ストユーザーがいなければ作�??
+        # �?ストユーザーがいなければ作�??
         # existing_user = User.query.get(TEMP_USER_ID)
         existing_user = db.session.get(User, TEMP_USER_ID)
 
@@ -204,9 +206,9 @@ if __name__ == '__main__':
             )
             db.session.add(test_user)
             db.session.commit()
-            print('�?ストユーザーを作�?�しました')
+            print('�?ストユーザーを作�?�しました')
         else:
-            print('�?ストユーザーは既に存在しま�?')
+            print('�?ストユーザーは既に存在しま�?')
     
     app.run(debug=True, port=5000)
 
