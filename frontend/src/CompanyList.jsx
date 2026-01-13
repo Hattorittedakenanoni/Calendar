@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { getCompanies } from './api/companies';
 
 function CompanyList() {
-  const [companies, setCompanies] = useState([]);
+  const [companies, setCompanies] = useState([]); 
 
   useEffect(() => {
     getCompanies()
