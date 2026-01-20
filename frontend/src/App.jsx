@@ -1,4 +1,4 @@
-#企業情報の入力フォームの作成
+// 企業情報の入力フォームの作成
 import { useEffect, useState } from 'react'
 
 function App() {
