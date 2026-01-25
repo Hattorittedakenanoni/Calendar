@@ -61,3 +61,32 @@ export async function healthCheck() {
   const response = await fetch(`${API_BASE}/health`);
   return response.json();
 }
+
+// Api.js ‚Ìˆê”Ô‰º‚È‚Ç‚É’Ç‹L‚µ‚Ä‚­‚¾‚³‚¢
+
+// –ÊÚŒó•â“ú‚Ìˆê——æ“¾
+export async function getProposals() {
+  const response = await fetch(`${API_BASE}/proposals`);
+  if (!response.ok) throw new Error('Œó•â“ú‚Ìæ“¾‚É¸”s‚µ‚Ü‚µ‚½');
+  return response.json();
+}
+
+// –ÊÚŒó•â“ú‚Ì’Ç‰Á
+export async function createProposal(dateText) {
+  const response = await fetch(`${API_BASE}/proposals`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ date_text: dateText }),
+  });
+  if (!response.ok) throw new Error('Œó•â“ú‚Ì•Û‘¶‚É¸”s‚µ‚Ü‚µ‚½');
+  return response.json();
+}
+
+// –ÊÚŒó•â“ú‚Ìíœ
+export async function deleteProposal(propId) {
+  const response = await fetch(`${API_BASE}/proposals/${propId}`, {
+    method: 'DELETE',
+  });
+  if (!response.ok) throw new Error('Œó•â“ú‚Ìíœ‚É¸”s‚µ‚Ü‚µ‚½');
+  return response.json();
+}
