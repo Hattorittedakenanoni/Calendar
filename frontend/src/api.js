@@ -1,6 +1,7 @@
-// API通信をまとめるファイル
+// API communication functions
 
-const API_BASE = 'http://127.0.0.1:5000/api';
+// 本番環境と開発環境でURLを切り替え
+const API_BASE = import.meta.env.VITE_API_URL || 'http://127.0.0.1:5000/api';
 
 // ========================================
 // 企業（就活状況）API
