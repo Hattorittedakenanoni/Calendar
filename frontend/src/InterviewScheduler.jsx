@@ -1,15 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
-import { getProposals, createProposal, deleteProposal } from './Api.js'; // APIをインポート
+import { getProposals, createProposal, deleteProposal } from './api.js'; // APIをインポ�?��?
 
 const InterviewScheduler = () => {
   const [selectedDate, setSelectedDate] = useState(new Date());
-  const [candidateDates, setCandidateDates] = useState([]); // データベースからのリスト
+  const [candidateDates, setCandidateDates] = useState([]); // �?ータベ�?�スからのリス�?
   const [timeSlot, setTimeSlot] = useState("10:00");
   const [loading, setLoading] = useState(false);
 
-  // 初期読み込み：データベースから候補日を取得
+  // 初期読み込み?��データベ�?�スから候補日を取�?
   useEffect(() => {
     fetchData();
   }, []);
@@ -23,12 +23,12 @@ const InterviewScheduler = () => {
     }
   };
 
-  // 候補日をデータベースに保存
+  // 候補日をデータベ�?�スに保�?
   const addCandidate = async () => {
     const dateString = selectedDate.toLocaleDateString('ja-JP');
     const newEntry = `${dateString} ${timeSlot}`;
     
-    // 重複チェック（表示上の重複を防ぐ）
+    // 重�?チェ�?ク?��表示上�?�重�?を防ぐ�?
     if (candidateDates.some(c => c.date_text === newEntry)) return;
 
     try {
@@ -42,7 +42,7 @@ const InterviewScheduler = () => {
     }
   };
 
-  // 候補日をデータベースから削除
+  // 候補日をデータベ�?�スから削除
   const removeCandidate = async (id) => {
     try {
       await deleteProposal(id);
@@ -74,11 +74,11 @@ const InterviewScheduler = () => {
               disabled={loading}
               style={{ marginLeft: '10px', padding: '8px 15px', backgroundColor: '#10b981', color: 'white', border: 'none', borderRadius: '4px', cursor: loading ? 'not-allowed' : 'pointer' }}
             >
-              {loading ? '保存中...' : '候補に追加'}
+              {loading ? '保存中...' : '候補に追�?'}
             </button>
           </div>
 
-          <p style={{ fontWeight: 'bold' }}>保存済みの候補リスト:</p>
+          <p style={{ fontWeight: 'bold' }}>保存済みの候補リス�?:</p>
           <ul style={{ listStyle: 'none', padding: 0 }}>
             {candidateDates.length === 0 && <li style={{ color: '#9ca3af' }}>候補がありません</li>}
             {candidateDates.map((item) => (
