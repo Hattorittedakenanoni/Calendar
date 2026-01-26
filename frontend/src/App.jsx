@@ -1,20 +1,20 @@
 import { useEffect, useState } from 'react'
 import { getCompanies, createCompany } from './api.js'
-// �? カレンダーコンポ�?�ネントをインポ�?��?
+// ★ カレンダーコンポーネントをインポート
 import InterviewScheduler from './InterviewScheduler.jsx'
 
-// 選�?ス�?ータスの選択肢
-const STATUS_OPTIONS = ['応募中', '書類選�?中', '面接予�?', '�?�?', '不採用', '辞退']
+// 選考ステータスの選択肢
+const STATUS_OPTIONS = ['応募中', '書類選考中', '面接予定', '内定', '不採用', '辞退']
 
 // 志望度の選択肢
 const LEVEL_OPTIONS = ['A', 'B', 'C']
 
 function App() {
-  const [companies, setCompanies] = useState([]) //companies:企業の�?ータ
+  const [companies, setCompanies] = useState([]) //companies:企業のデータ
   const [error, setError] = useState(null)
   const [loading, setLoading] = useState(true)
 
-  // フォー�?の状�?
+  // フォームの状態
   const [formData, setFormData] = useState({
     company_name: '',
     via: '',
@@ -27,7 +27,7 @@ function App() {
     memo: '',
   })
 
-  // 企業一覧取�?(backend(�?ータベ�?�ス)から�?報を得られる)
+  // 企業一覧取得(backend(データベース)から情報を得られる)
   const fetchCompanies = async () => {
     try {
       setLoading(true)
@@ -45,13 +45,13 @@ function App() {
     fetchCompanies()
   }, [])
 
-  // フォー�?入力�?�処�?
+  // フォーム入力の処理
   const handleChange = (e) => {
     const { name, value } = e.target
     setFormData(prev => ({ ...prev, [name]: value }))
   }
 
-  // フォー�?リセ�?�?
+  // フォームリセット
   const resetForm = () => {
     setFormData({
       company_name: '',
@@ -66,7 +66,7 @@ function App() {
     })
   }
 
-  // 企業追�?
+  // 企業追加
   const handleSubmit = async (e) => {
     e.preventDefault()
     setError(null)
@@ -85,7 +85,7 @@ function App() {
     }
   }
 
-  // 日時フォーマッ�?
+  // 日時フォーマット
   const formatDateTime = (isoString) => {
     if (!isoString) return '-'
     return new Date(isoString).toLocaleString('ja-JP', {
@@ -99,7 +99,7 @@ function App() {
   
   return (
     <div style={{ padding: '40px', maxWidth: '1200px', margin: '0 auto' }}>
-      <h1>就活管�?アプリ</h1>
+      <h1>就活管理アプリ</h1>
 
       {/* エラー表示 */}
       {error && (
@@ -108,22 +108,22 @@ function App() {
         </p>
       )}
 
-      {/* 入力フォー�? */}
+      {/* 入力フォーム */}
       <div style={{ backgroundColor: '#f9fafb', padding: '20px', borderRadius: '8px', marginBottom: '20px' }}>
-        <h2>企業を追�?</h2>
+        <h2>企業を追加</h2>
         <form onSubmit={handleSubmit}>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
-            {/* 企業�? */}
+            {/* 企業名 */}
             <div>
               <label style={{ display: 'block', marginBottom: '4px', fontWeight: 'bold' }}>
-                企業�? *
+                企業名 *
               </label>
               <input
                 type="text"
                 name="company_name"
                 value={formData.company_name}
                 onChange={handleChange}
-                placeholder="�?: 株式会社�?�?"
+                placeholder="例: 株式会社〇〇"
                 style={{ width: '100%', padding: '8px', borderRadius: '4px', border: '1px solid #ccc', boxSizing: 'border-box' }}
                 required
               />
@@ -139,15 +139,15 @@ function App() {
                 name="via"
                 value={formData.via}
                 onChange={handleChange}
-                placeholder="�?: マイナビ、リクナビ"
+                placeholder="例: マイナビ、リクナビ"
                 style={{ width: '100%', padding: '8px', borderRadius: '4px', border: '1px solid #ccc', boxSizing: 'border-box' }}
               />
             </div>
 
-            {/* 選�?ス�?ータス */}
+            {/* 選考ステータス */}
             <div>
               <label style={{ display: 'block', marginBottom: '4px', fontWeight: 'bold' }}>
-                選�?ス�?ータス
+                選考ステータス
               </label>
               <select
                 name="status"
@@ -180,10 +180,10 @@ function App() {
               </select>
             </div>
 
-            {/* 面接日時（開始�? */}
+            {/* 面接日時（開始） */}
             <div>
               <label style={{ display: 'block', marginBottom: '4px', fontWeight: 'bold' }}>
-                面接日時（開始�?
+                面接日時（開始）
               </label>
               <input
                 type="datetime-local"
@@ -194,10 +194,10 @@ function App() {
               />
             </div>
 
-            {/* 面接日時（終�??�? */}
+            {/* 面接日時（終了） */}
             <div>
               <label style={{ display: 'block', marginBottom: '4px', fontWeight: 'bold' }}>
-                面接日時（終�??�?
+                面接日時（終了）
               </label>
               <input
                 type="datetime-local"
@@ -208,10 +208,10 @@ function App() {
               />
             </div>
 
-            {/* 良�?と思う点 */}
+            {/* 良いと思う点 */}
             <div>
               <label style={{ display: 'block', marginBottom: '4px', fontWeight: 'bold' }}>
-                良�?と思う点
+                良いと思う点
               </label>
               <textarea
                 name="goodpoint"
@@ -247,7 +247,7 @@ function App() {
               />
             </div>
 
-            {/* �? 追�??��面接候補日管�?コンポ�?�ネン�? */}
+            {/* ★ 追加：面接候補日管理コンポーネント */}
             <div style={{ gridColumn: '1 / -1' }}>
               <InterviewScheduler />
             </div>
@@ -265,7 +265,7 @@ function App() {
               cursor: 'pointer'
             }}
           >
-            追�?
+            追加
           </button>
         </form>
       </div>
@@ -276,17 +276,17 @@ function App() {
         {loading ? (
           <p>読み込み中...</p>
         ) : companies.length === 0 ? (
-          <p>ま�?企業が登録されて�?ません�?</p>
+          <p>まだ企業が登録されていません。</p>
         ) : (
           <table style={{ width: '100%', borderCollapse: 'collapse', backgroundColor: 'white' }}>
             <thead>
               <tr style={{ backgroundColor: '#f9fafb' }}>
-                <th style={{ padding: '12px', textAlign: 'left', borderBottom: '1px solid #e5e7eb' }}>企業�?</th>
+                <th style={{ padding: '12px', textAlign: 'left', borderBottom: '1px solid #e5e7eb' }}>企業名</th>
                 <th style={{ padding: '12px', textAlign: 'left', borderBottom: '1px solid #e5e7eb' }}>経由</th>
-                <th style={{ padding: '12px', textAlign: 'left', borderBottom: '1px solid #e5e7eb' }}>ス�?ータス</th>
+                <th style={{ padding: '12px', textAlign: 'left', borderBottom: '1px solid #e5e7eb' }}>ステータス</th>
                 <th style={{ padding: '12px', textAlign: 'left', borderBottom: '1px solid #e5e7eb' }}>志望度</th>
-                <th style={{ padding: '12px', textAlign: 'left', borderBottom: '1px solid #e5e7eb' }}>面接日�?</th>
-                <th style={{ padding: '12px', textAlign: 'left', borderBottom: '1px solid #e5e7eb' }}>良�?点</th>
+                <th style={{ padding: '12px', textAlign: 'left', borderBottom: '1px solid #e5e7eb' }}>面接日時</th>
+                <th style={{ padding: '12px', textAlign: 'left', borderBottom: '1px solid #e5e7eb' }}>良い点</th>
                 <th style={{ padding: '12px', textAlign: 'left', borderBottom: '1px solid #e5e7eb' }}>懸念点</th>
               </tr>
             </thead>

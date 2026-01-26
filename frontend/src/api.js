@@ -1,22 +1,22 @@
 // API communication functions
 
-// –{”ÔŠÂ‹«‚ÆŠJ”­ŠÂ‹«‚ÅURL‚ğØ‚è‘Ö‚¦
+// æœ¬ç•ªç’°å¢ƒã¨é–‹ç™ºç’°å¢ƒã§URLã‚’åˆ‡ã‚Šæ›¿ãˆ
 const API_BASE = import.meta.env.VITE_API_URL || 'http://127.0.0.1:5000/api';
 
 // ========================================
-// Šé‹ÆiAŠˆó‹µjAPI
+// ä¼æ¥­ï¼ˆå°±æ´»çŠ¶æ³ï¼‰API
 // ========================================
 
-// Šé‹Æˆê——æ“¾
+// ä¼æ¥­ä¸€è¦§å–å¾—
 export async function getCompanies() {
   const response = await fetch(`${API_BASE}/companies`);
   if (!response.ok) {
-    throw new Error('Šé‹Æˆê——‚Ìæ“¾‚É¸”s‚µ‚Ü‚µ‚½');
+    throw new Error('ä¼æ¥­ä¸€è¦§ã®å–å¾—ã«å¤±æ•—ã—ã¾ã—ãŸ');
   }
   return response.json();
 }
 
-// Šé‹Æ’Ç‰Á
+// ä¼æ¥­è¿½åŠ 
 export async function createCompany(data) {
   const response = await fetch(`${API_BASE}/companies`, {
     method: 'POST',
@@ -26,12 +26,12 @@ export async function createCompany(data) {
     body: JSON.stringify(data),
   });
   if (!response.ok) {
-    throw new Error('Šé‹Æ‚Ì’Ç‰Á‚É¸”s‚µ‚Ü‚µ‚½');
+    throw new Error('ä¼æ¥­ã®è¿½åŠ ã«å¤±æ•—ã—ã¾ã—ãŸ');
   }
   return response.json();
 }
 
-// Šé‹ÆXV
+// ä¼æ¥­æ›´æ–°
 export async function updateCompany(companyId, data) {
   const response = await fetch(`${API_BASE}/companies/${companyId}`, {
     method: 'PUT',
@@ -41,53 +41,53 @@ export async function updateCompany(companyId, data) {
     body: JSON.stringify(data),
   });
   if (!response.ok) {
-    throw new Error('Šé‹Æî•ñ‚ÌXV‚É¸”s‚µ‚Ü‚µ‚½');
+    throw new Error('ä¼æ¥­æƒ…å ±ã®æ›´æ–°ã«å¤±æ•—ã—ã¾ã—ãŸ');
   }
   return response.json();
 }
 
-// Šé‹Æíœ
+// ä¼æ¥­å‰Šé™¤
 export async function deleteCompany(companyId) {
   const response = await fetch(`${API_BASE}/companies/${companyId}`, {
     method: 'DELETE',
   });
   if (!response.ok) {
-    throw new Error('Šé‹Æ‚Ìíœ‚É¸”s‚µ‚Ü‚µ‚½');
+    throw new Error('ä¼æ¥­ã®å‰Šé™¤ã«å¤±æ•—ã—ã¾ã—ãŸ');
   }
   return response.json();
 }
 
-// ƒwƒ‹ƒXƒ`ƒFƒbƒN
+// ãƒ˜ãƒ«ã‚¹ãƒã‚§ãƒƒã‚¯
 export async function healthCheck() {
   const response = await fetch(`${API_BASE}/health`);
   return response.json();
 }
 
-// Api.js ‚Ìˆê”Ô‰º‚È‚Ç‚É’Ç‹L‚µ‚Ä‚­‚¾‚³‚¢
+// Api.js ã®ä¸€ç•ªä¸‹ãªã©ã«è¿½è¨˜ã—ã¦ãã ã•ã„
 
-// –ÊÚŒó•â“ú‚Ìˆê——æ“¾
+// é¢æ¥å€™è£œæ—¥ã®ä¸€è¦§å–å¾—
 export async function getProposals() {
   const response = await fetch(`${API_BASE}/proposals`);
-  if (!response.ok) throw new Error('Œó•â“ú‚Ìæ“¾‚É¸”s‚µ‚Ü‚µ‚½');
+  if (!response.ok) throw new Error('å€™è£œæ—¥ã®å–å¾—ã«å¤±æ•—ã—ã¾ã—ãŸ');
   return response.json();
 }
 
-// –ÊÚŒó•â“ú‚Ì’Ç‰Á
+// é¢æ¥å€™è£œæ—¥ã®è¿½åŠ 
 export async function createProposal(dateText) {
   const response = await fetch(`${API_BASE}/proposals`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ date_text: dateText }),
   });
-  if (!response.ok) throw new Error('Œó•â“ú‚Ì•Û‘¶‚É¸”s‚µ‚Ü‚µ‚½');
+  if (!response.ok) throw new Error('å€™è£œæ—¥ã®ä¿å­˜ã«å¤±æ•—ã—ã¾ã—ãŸ');
   return response.json();
 }
 
-// –ÊÚŒó•â“ú‚Ìíœ
+// é¢æ¥å€™è£œæ—¥ã®å‰Šé™¤
 export async function deleteProposal(propId) {
   const response = await fetch(`${API_BASE}/proposals/${propId}`, {
     method: 'DELETE',
   });
-  if (!response.ok) throw new Error('Œó•â“ú‚Ìíœ‚É¸”s‚µ‚Ü‚µ‚½');
+  if (!response.ok) throw new Error('å€™è£œæ—¥ã®å‰Šé™¤ã«å¤±æ•—ã—ã¾ã—ãŸ');
   return response.json();
 }
