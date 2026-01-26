@@ -5,15 +5,15 @@ load_dotenv()
 
 
 class Config:
-    """ƒAƒvƒŠƒP[ƒVƒ‡ƒ“İ’è"""
+    """ã‚¢ãƒ—ãƒªã‚±ãƒ¼ã‚·ãƒ§ãƒ³è¨­å®š"""
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     SECRET_KEY = os.getenv('SECRET_KEY', 'dev-secret-key')
     
-    # DATABASE_URL ‚ğæ“¾
+    # DATABASE_URL ã‚’å–å¾—
     database_url = os.getenv('DATABASE_URL')
     
     if database_url:
-        # Render ‚Í postgres:// ‚ğg‚¤‚±‚Æ‚ª‚ ‚é‚Ì‚Å postgresql:// ‚É•ÏŠ·
+        # Render ã¯ postgres:// ã‚’ä½¿ã†ã“ã¨ãŒã‚ã‚‹ã®ã§ postgresql:// ã«å¤‰æ›
         if database_url.startswith('postgres://'):
             database_url = database_url.replace('postgres://', 'postgresql://', 1)
     
