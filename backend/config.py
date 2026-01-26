@@ -5,12 +5,16 @@ load_dotenv()
 
 
 class Config:
-    """ã‚¢ãƒ—ãƒªã‚±ãƒ¼ã‚·ãƒ§ãƒ³è¨­å®š"""
-    # PostgreSQLæ¥ç¶šURLï¼ˆ.envã‹ã‚‰èª­ã¿è¾¼ã¿ï¼‰
-    SQLALCHEMY_DATABASE_URI = os.getenv('DATABASE_URL')
+    """ƒAƒvƒŠƒP[ƒVƒ‡ƒ“İ’è"""
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     SECRET_KEY = os.getenv('SECRET_KEY', 'dev-secret-key')
     
-    # æ¥ç¶šURLãŒè¨­å®šã•ã‚Œã¦ã„ãªã„å ´åˆã®ã‚¨ãƒ©ãƒ¼ãƒã‚§ãƒƒã‚¯
-    if not SQLALCHEMY_DATABASE_URI:
-        raise ValueError("DATABASE_URL environment variable is not set")
+    # DATABASE_URL ‚ğæ“¾
+    database_url = os.getenv('DATABASE_URL')
+    
+    if database_url:
+        # Render ‚Í postgres:// ‚ğg‚¤‚±‚Æ‚ª‚ ‚é‚Ì‚Å postgresql:// ‚É•ÏŠ·
+        if database_url.startswith('postgres://'):
+            database_url = database_url.replace('postgres://', 'postgresql://', 1)
+    
+    SQLALCHEMY_DATABASE_URI = database_url
